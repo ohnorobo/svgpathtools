@@ -2702,7 +2702,8 @@ class Path(MutableSequence):
     def d(self, useSandT=False, use_closed_attrib=False, rel=False):
         """Returns a path d-string for the path object.
         For an explanation of useSandT and use_closed_attrib, see the
-        compatibility notes in the README."""
+        compatibility notes in the README.
+        round_decimal_places sets the number of decimal places to output."""
         if len(self) == 0:
             return ''
         if use_closed_attrib:
@@ -2714,12 +2715,12 @@ class Path(MutableSequence):
         else:
             self_closed = False
             segments = self[:]
-    
+
         current_pos = None
         parts = []
         previous_segment = None
         end = self[-1].end
-    
+
         for segment in segments:
             seg_start = segment.start
             # If the start of this segment does not coincide with the end of
@@ -2731,26 +2732,28 @@ class Path(MutableSequence):
                     _seg_start = seg_start - current_pos if current_pos is not None else seg_start
                 else:
                     _seg_start = seg_start
-                parts.append('M {},{}'.format(_seg_start.real, _seg_start.imag))
-    
+                a0, a1 = (_seg_start.real, _seg_start.imag)
+                parts.append(f'M {a0:g},{a1:g}')
+
             if isinstance(segment, Line):
                 if rel:
                     _seg_end = segment.end - seg_start
                 else:
                     _seg_end = segment.end
-                parts.append('L {},{}'.format(_seg_end.real, _seg_end.imag))
+                a0, a1 = (_seg_end.real, _seg_end.imag)
+                parts.append(f'L {a0:g},{a1:g}')
             elif isinstance(segment, CubicBezier):
                 if useSandT and segment.is_smooth_from(previous_segment,
-                                                       warning_on=False):
+                                                        warning_on=False):
                     if rel:
                         _seg_control2 = segment.control2 - seg_start
                         _seg_end = segment.end - seg_start
                     else:
                         _seg_control2 = segment.control2
                         _seg_end = segment.end
-                    args = (_seg_control2.real, _seg_control2.imag,
-                            _seg_end.real, _seg_end.imag)
-                    parts.append('S {},{} {},{}'.format(*args))
+                    a, b, c, d = (_seg_control2.real, _seg_control2.imag,
+                                _seg_end.real, _seg_end.imag)
+                    parts.append(f'S {a0:g},{a1:g} {b0:g},{b1:g}')
                 else:
                     if rel:
                         _seg_control1 = segment.control1 - seg_start
@@ -2760,19 +2763,19 @@ class Path(MutableSequence):
                         _seg_control1 = segment.control1
                         _seg_control2 = segment.control2
                         _seg_end = segment.end
-                    args = (_seg_control1.real, _seg_control1.imag,
-                            _seg_control2.real, _seg_control2.imag,
-                            _seg_end.real, _seg_end.imag)
-                    parts.append('C {},{} {},{} {},{}'.format(*args))
+                    a0, a1, b0, b1, c0, c1 = (_seg_control1.real, _seg_control1.imag,
+                                            _seg_control2.real, _seg_control2.imag,
+                                            _seg_end.real, _seg_end.imag)
+                    parts.append(f'C {a0:g},{a1:g} {b0:g},{b1:g} {c0:g},{c1:g}')
             elif isinstance(segment, QuadraticBezier):
                 if useSandT and segment.is_smooth_from(previous_segment,
-                                                       warning_on=False):
+                                                        warning_on=False):
                     if rel:
                         _seg_end = segment.end - seg_start
                     else:
                         _seg_end = segment.end
-                    args = _seg_end.real, _seg_end.imag
-                    parts.append('T {},{}'.format(*args))
+                    a0, a1 = (_seg_end.real, _seg_end.imag)
+                    parts.append(f'T {a0:g},{a1:g}')
                 else:
                     if rel:
                         _seg_control = segment.control - seg_start
@@ -2780,25 +2783,25 @@ class Path(MutableSequence):
                     else:
                         _seg_control = segment.control
                         _seg_end = segment.end
-                    args = (_seg_control.real, _seg_control.imag,
-                            _seg_end.real, _seg_end.imag)
-                    parts.append('Q {},{} {},{}'.format(*args))
-    
+                    a0, a1, b0, b1 = (_seg_control.real, _seg_control.imag,
+                                _seg_end.real, _seg_end.imag)
+                    parts.append(f'Q {a0:g},{a1:g} {b0:g},{b1:g}')
+
             elif isinstance(segment, Arc):
                 if rel:
                     _seg_end = segment.end - seg_start
                 else:
                     _seg_end = segment.end
-                args = (segment.radius.real, segment.radius.imag,
-                        segment.rotation,int(segment.large_arc),
-                        int(segment.sweep),_seg_end.real, _seg_end.imag)
-                parts.append('A {},{} {} {:d},{:d} {},{}'.format(*args))
+                a0, a1, b, c, d, e0, e1 = (segment.radius.real, segment.radius.imag,
+                                        segment.rotation,int(segment.large_arc),
+                                        int(segment.sweep),_seg_end.real, _seg_end.imag)
+                parts.append(f'A {a0:g},{a1:g} {b:g} {c:d},{d:d} {e0:g},{e1:g}')
             current_pos = segment.end
             previous_segment = segment
-    
+
         if self_closed:
             parts.append('Z')
-    
+
         s = ' '.join(parts)
         return s if not rel else s.lower()
 
