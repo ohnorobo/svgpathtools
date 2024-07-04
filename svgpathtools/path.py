@@ -2702,8 +2702,7 @@ class Path(MutableSequence):
     def d(self, useSandT=False, use_closed_attrib=False, rel=False):
         """Returns a path d-string for the path object.
         For an explanation of useSandT and use_closed_attrib, see the
-        compatibility notes in the README.
-        round_decimal_places sets the number of decimal places to output."""
+        compatibility notes in the README."""
         if len(self) == 0:
             return ''
         if use_closed_attrib:
@@ -2715,12 +2714,10 @@ class Path(MutableSequence):
         else:
             self_closed = False
             segments = self[:]
-
         current_pos = None
         parts = []
         previous_segment = None
         end = self[-1].end
-
         for segment in segments:
             seg_start = segment.start
             # If the start of this segment does not coincide with the end of
