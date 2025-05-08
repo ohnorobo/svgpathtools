@@ -84,7 +84,7 @@ class TestSVG2Paths(unittest.TestCase):
         non_rounded_dict = {"x": "10", "y": "10", "width": "100", "height": "100"}
         self.assertEqual(
             rect2pathd(non_rounded_dict),
-            "M10.0 10.0 L 110.0 10.0 L 110.0 110.0 L 10.0 110.0 z",
+            "M10 10 L 110 10 L 110 110 L 10 110 z",
         )
 
         non_rounded_svg = """<?xml version="1.0" encoding="UTF-8"?>
@@ -97,17 +97,17 @@ class TestSVG2Paths(unittest.TestCase):
         self.assertTrue(paths[0].isclosed())
         self.assertEqual(
             paths[0].d(use_closed_attrib=True),
-            "M 10.0,10.0 L 110.0,10.0 L 110.0,110.0 L 10.0,110.0 Z",
+            "M 10,10 L 110,10 L 110,110 L 10,110 Z",
         )
         self.assertEqual(
             paths[0].d(use_closed_attrib=False),
-            "M 10.0,10.0 L 110.0,10.0 L 110.0,110.0 L 10.0,110.0 L 10.0,10.0",
+            "M 10,10 L 110,10 L 110,110 L 10,110 L 10,10",
         )
 
         rounded_dict = {"x": "10", "y": "10", "width": "100","height": "100", "rx": "15", "ry": "12"}
         self.assertEqual(
             rect2pathd(rounded_dict),
-            "M 25.0 10.0 L 95.0 10.0 A 15.0 12.0 0 0 1 110.0 22.0 L 110.0 98.0 A 15.0 12.0 0 0 1 95.0 110.0 L 25.0 110.0 A 15.0 12.0 0 0 1 10.0 98.0 L 10.0 22.0 A 15.0 12.0 0 0 1 25.0 10.0 z",
+            "M 25 10 L 95 10 A 15 12 0 0 1 110 22 L 110 98 A 15 12 0 0 1 95 110 L 25 110 A 15 12 0 0 1 10 98 L 10 22 A 15 12 0 0 1 25 10 z",
         )
 
         rounded_svg = """<?xml version="1.0" encoding="UTF-8"?>
@@ -120,7 +120,7 @@ class TestSVG2Paths(unittest.TestCase):
         self.assertTrue(paths[0].isclosed())
         self.assertEqual(
             paths[0].d(),
-            "M 25.0,10.0 L 95.0,10.0 A 15.0,12.0 0.0 0,1 110.0,22.0 L 110.0,98.0 A 15.0,12.0 0.0 0,1 95.0,110.0 L 25.0,110.0 A 15.0,12.0 0.0 0,1 10.0,98.0 L 10.0,22.0 A 15.0,12.0 0.0 0,1 25.0,10.0",
+            "M 25,10 L 95,10 A 15,12 0 0,1 110,22 L 110,98 A 15,12 0 0,1 95,110 L 25,110 A 15,12 0 0,1 10,98 L 10,22 A 15,12 0 0,1 25,10",
         )
 
     def test_from_file_path_string(self):
