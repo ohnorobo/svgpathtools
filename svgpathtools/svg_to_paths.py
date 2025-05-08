@@ -106,15 +106,15 @@ def rect2pathd(rect):
             ry = rx or 0.
         rx, ry = float(rx), float(ry)
 
-        d = "M {} {} ".format(x + rx, y)  # right of p0
-        d += "L {} {} ".format(x + w - rx, y)  # go to p1
-        d += "A {} {} 0 0 1 {} {} ".format(rx, ry, x+w, y+ry)  # arc for p1
-        d += "L {} {} ".format(x+w, y+h-ry)  # above p2
-        d += "A {} {} 0 0 1 {} {} ".format(rx, ry, x+w-rx, y+h)  # arc for p2
-        d += "L {} {} ".format(x+rx, y+h)  # right of p3
-        d += "A {} {} 0 0 1 {} {} ".format(rx, ry, x, y+h-ry)  # arc for p3
-        d += "L {} {} ".format(x, y+ry)  # below p0
-        d += "A {} {} 0 0 1 {} {} z".format(rx, ry, x+rx, y)  # arc for p0
+        d = "M {:g} {:g} ".format(x + rx, y)  # right of p0
+        d += "L {:g} {:g} ".format(x + w - rx, y)  # go to p1
+        d += "A {:g} {:g} 0 0 1 {:g} {:g} ".format(rx, ry, x+w, y+ry)  # arc for p1
+        d += "L {:g} {:g} ".format(x+w, y+h-ry)  # above p2
+        d += "A {:g} {:g} 0 0 1 {:g} {:g} ".format(rx, ry, x+w-rx, y+h)  # arc for p2
+        d += "L {:g} {:g} ".format(x+rx, y+h)  # right of p3
+        d += "A {:g} {:g} 0 0 1 {:g} {:g} ".format(rx, ry, x, y+h-ry)  # arc for p3
+        d += "L {:g} {:g} ".format(x, y+ry)  # below p0
+        d += "A {:g} {:g} 0 0 1 {:g} {:g} z".format(rx, ry, x+rx, y)  # arc for p0
         return d
 
     x0, y0 = x, y
@@ -122,7 +122,7 @@ def rect2pathd(rect):
     x2, y2 = x + w, y + h
     x3, y3 = x, y + h
 
-    d = ("M{} {} L {} {} L {} {} L {} {} z"
+    d = ("M{:g} {:g} L {:g} {:g} L {:g} {:g} L {:g} {:g} z"
          "".format(x0, y0, x1, y1, x2, y2, x3, y3))
         
     return d
